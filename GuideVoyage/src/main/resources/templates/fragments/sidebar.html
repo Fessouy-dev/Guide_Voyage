@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            position: fixed;
+            left: 0;
+            top: 0;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            font-size: 24px;
+            margin: 0;
+            color: white;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #34495e;
+        }
+
+        .nav-link.active {
+            background-color: #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div th:fragment="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">Guide de Voyage</h1>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="/admin/home" class="nav-link" th:classappend="${activePage == 'home' ? 'active' : ''}">
+                    <i class="fas fa-home"></i>
+                    Accueil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/Hotels" class="nav-link" th:classappend="${activePage == 'hotels' ? 'active' : ''}">
+                    <i class="fas fa-hotel"></i>
+                    Hôtels
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/Restaurants" class="nav-link" th:classappend="${activePage == 'restaurants' ? 'active' : ''}">
+                    <i class="fas fa-utensils"></i>
+                    Restaurants
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/activites" class="nav-link" th:classappend="${activePage == 'activites' ? 'active' : ''}">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Activités
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html> 

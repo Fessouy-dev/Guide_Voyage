@@ -4,6 +4,7 @@ import com.monTour.guidevoyage.model.*;
 import com.monTour.guidevoyage.service.ActiviteService;
 import com.monTour.guidevoyage.service.HotelService;
 import com.monTour.guidevoyage.service.RestaurantService;
+import com.monTour.guidevoyage.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Controller
 public class AdminController {
     @Autowired
@@ -28,6 +31,8 @@ public class AdminController {
     private RestaurantService restaurantService;
     @Autowired
     private ActiviteService activiteService;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
     @GetMapping("/admin/Hotels/Ajouter")
     public String afficherFormulaireAjoutHotel(Model model) {
@@ -59,6 +64,7 @@ public class AdminController {
             }
         }
 
+        hotel.setNValide(true);
         hotelService.ajouterHotel(hotel);
         return "redirect:/admin/home";
     }
@@ -92,7 +98,7 @@ public class AdminController {
     public String afficherFormulaireAjoutRestaurant(Model model) {
         // Créer un nouvel objet Restaurant
         Restaurant restaurant = new Restaurant();
-         model.addAttribute("specialites", Specialiter.values());
+        model.addAttribute("specialites", Specialiter.values());
         restaurant.setVille(new Ville());
         model.addAttribute("restaurant", restaurant);
         return "ajouterRestaurant";
@@ -116,6 +122,7 @@ public class AdminController {
                 }
             }
         }
+        restaurant.setNValide(true);
         restaurantService.ajouterRestaurant(restaurant);
         return "redirect:/admin/home";
 
@@ -124,7 +131,7 @@ public class AdminController {
     public String AfficherFormulaireAjoutActivite(Model model) {
         // Créer un nouvel objet Activite
         Activite activite = new Activite();
-        model.addAttribute("Activiter",TypeActivie.values());
+        model.addAttribute("typesActivite",TypeActivie.values());
         activite.setVille(new Ville());
         model.addAttribute("activite", activite);
         return "ajouterActivite";
@@ -148,6 +155,7 @@ public class AdminController {
                 }
             }
         }
+        activite.setNValide(true);
         activiteService.ajouterActivite(activite);
         return "redirect:/admin/home";
 
@@ -181,7 +189,7 @@ public class AdminController {
             if (hotel.getPhoto() != null && !hotel.getPhoto().isEmpty()) {
                 deleteImage(hotel.getPhoto());
             }
-            
+
             // Supprimer les photos additionnelles
             if (hotel.getPhotos() != null) {
                 for (String photo : hotel.getPhotos()) {
@@ -190,7 +198,7 @@ public class AdminController {
                     }
                 }
             }
-            
+
             hotelService.deleteHotel(id);
         }
         return "redirect:/admin/Hotels";
@@ -202,7 +210,7 @@ public class AdminController {
             // Convertir le chemin relatif en chemin absolu
             String uploadDir = "src/main/resources/static";
             Path filePath = Paths.get(uploadDir + imagePath);
-            
+
             // Vérifier si le fichier existe et le supprimer
             if (Files.exists(filePath)) {
                 Files.delete(filePath);
@@ -436,12 +444,14 @@ public class AdminController {
         long hotelCount = hotelService.getAllHotels().size();
         long restaurantCount = restaurantService.getAllRestaurants().size();
         long activityCount = activiteService.getAllActivites().size();
+        long userCount = utilisateurService.countUtilisateurs();
 
         // Ajouter les statistiques au modèle
         model.addAttribute("hotelCount", hotelCount);
         model.addAttribute("restaurantCount", restaurantCount);
         model.addAttribute("activityCount", activityCount);
-        
+        model.addAttribute("userCount", userCount);
+
         // Ajouter l'URL active
         model.addAttribute("activePage", "home");
 
@@ -452,4 +462,65 @@ public class AdminController {
     public String redirectToAdminHome() {
         return "redirect:/admin/home";
     }
-}
+    @GetMapping("/admin/ValiderActivites/{id}")
+        public String validerActivite(@PathVariable Long id ) {
+            Activite activite = activiteService.getActiviteById(id);
+            if (activite != null) {
+                activite.setNValide(true);
+               activiteService.updateActivite(id, activite);
+            }
+            return "redirect:/admin/activites";
+        }
+
+        @GetMapping("/admin/ValiderActivites")
+        
+        public String afficherActivitesNonValidees(Model model) {
+            List<Activite> activites = activiteService.getAllActivites()
+                .stream()
+                .filter(a -> a.getNValide() != null && !a.getNValide())
+                .toList();
+            model.addAttribute("activites", activites);
+            return "validerActivites";
+        }
+        @GetMapping("/admin/ValiderHotels/{id}")
+    public String validerHotel(@PathVariable Long id ) {
+        Hotel hotel = hotelService.getHotelById(id);
+        if (hotel != null) {
+            hotel.setNValide(true);
+            hotelService.updateHotel(id, hotel);
+        }
+        return "redirect:/admin/Hotels";
+    }
+    @GetMapping("/admin/ValiderHotels")
+    public String afficherHotelsNonValidees(Model model) {
+        List<Hotel> hotels = hotelService.getAllHotels()
+                .stream()
+                .filter(h -> h.getNValide() != null && !h.getNValide())
+                .toList();
+        model.addAttribute("hotels", hotels);
+        return "validerHotels";
+    }
+    @GetMapping("/admin/ValiderRestaurants/{id}")
+    public String ValiderRestaurant(@PathVariable Long id) {
+        Restaurant restaurant = restaurantService.getRestaurantById(id);
+        if (restaurant != null) {
+            restaurant.setNValide(true);
+            restaurantService.updateRestaurant(id, restaurant);
+        }
+        return "redirect:/admin/Restaurants";
+    }
+    @GetMapping("/admin/ValiderRestaurants")
+    public String afficherRestaurantsNonValidees(Model model) {
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants()
+                .stream()
+                .filter(r -> r.getNValide() != null && !r.getNValide())
+                .toList();
+        model.addAttribute("restaurants", restaurants);
+        return "validerRestaurants";
+    }
+
+
+  }
+
+    
+

@@ -2,97 +2,400 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier un Hôtel</title>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery (requis pour Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success-color: #10b981;
+            --success-hover: #059669;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background-color: var(--gray-100);
+            padding: 2rem;
         }
-        .form-container {
-            max-width: 600px;
+
+        h1 {
+            color: var(--gray-900);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: var(--gray-800);
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 500;
+        }
+
+        form {
+            max-width: 800px;
             margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
+
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+            font-weight: 500;
         }
-        input[type="text"],
-        input[type="number"],
-        textarea {
+
+        input, select, textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
         }
-        .submit-btn {
-            background-color: #2196F3;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        .current-photo {
+
+        .photo-container {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border: 2px dashed var(--gray-300);
+            transition: var(--transition);
+        }
+
+        .photo-container:hover {
+            border-color: var(--primary-color);
+        }
+
+        .photo-preview {
             max-width: 200px;
-            margin: 10px 0;
+            max-height: 150px;
+            margin-top: 1rem;
+            border-radius: var(--border-radius);
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .current-photo {
+            max-width: 250px;
+            max-height: 200px;
+            margin: 1rem 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-photo-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .add-photo-btn:hover {
+            background-color: var(--success-hover);
+            transform: translateY(-1px);
+        }
+
+        .remove-photo-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .remove-photo-btn:hover {
+            background-color: var(--danger-hover);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Select2 Customization */
+        .select2-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 45px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 45px;
+            padding-left: 1rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 43px;
+        }
+
+        .select2-dropdown {
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            form {
+                padding: 1.5rem;
+            }
+
+            .photo-container {
+                padding: 1rem;
+            }
+
+            .current-photo {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Modifier l'Hôtel</h1>
+    <h1><i class="fas fa-hotel"></i> Modifier un Hôtel</h1>
 
-        <form th:action="@{/admin/ModifierHotel/{id}(id=${hotel.id})}" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="nom">Nom de l'hôtel:</label>
-                <input type="text" id="nom" name="nom" th:value="${hotel.nom}" required>
+    <form th:action="@{/admin/ModifierHotel/{id}(id=${hotel.id})}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="nom"><i class="fas fa-signature"></i> Nom:</label>
+            <input type="text" id="nom" name="nom" th:value="${hotel.nom}" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="description"><i class="fas fa-align-left"></i> Description:</label>
+            <textarea id="description" name="description" rows="4" required th:text="${hotel.description}"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="adresse"><i class="fas fa-map-marker-alt"></i> Adresse:</label>
+            <input type="text" id="adresse" name="adresse" th:value="${hotel.adresse}" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="prix"><i class="fas fa-tag"></i> Prix par nuit:</label>
+            <input type="number" id="prix" name="prix" th:value="${hotel.prix}" required min="0" step="0.01"/>
+        </div>
+
+        <div class="form-group">
+            <label for="etoiles"><i class="fas fa-star"></i> Nombre d'étoiles:</label>
+            <select id="etoiles" name="etoiles" required>
+                <option value="" disabled>-- Sélectionnez le nombre d'étoiles --</option>
+                <option th:each="i : ${#numbers.sequence(1, 5)}"
+                        th:value="${i}"
+                        th:selected="${i == hotel.etoiles}"
+                        th:text="${i + ' étoiles'}">
+                </option>
+            </select>
+        </div>
+
+        <div class="photo-container">
+            <label><i class="fas fa-camera"></i> Photo principale actuelle:</label>
+            <img th:src="${hotel.photo}" alt="Photo actuelle" class="current-photo"/>
+        </div>
+
+        <div class="form-group">
+            <label for="photoFile"><i class="fas fa-upload"></i> Nouvelle photo principale:</label>
+            <input type="file" id="photoFile" name="photoFile" accept="image/*"/>
+            <img id="preview-main" class="photo-preview"/>
+        </div>
+
+        <div th:if="${hotel.photos ne null and not #lists.isEmpty(hotel.photos)}">
+            <h3><i class="fas fa-images"></i> Photos additionnelles actuelles</h3>
+            <div th:each="photo : ${hotel.photos}" class="photo-container">
+                <img th:src="${photo}" alt="Photo additionnelle" class="current-photo"/>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="localisation">Localisation:</label>
-                <input type="text" id="localisation" name="localisation" th:value="${hotel.localisation}" required>
+        <h3><i class="fas fa-plus-circle"></i> Nouvelles photos additionnelles</h3>
+        <div id="photos-container">
+            <div class="photo-container">
+                <label><i class="fas fa-image"></i> Photo:</label>
+                <input type="file" name="additionalPhotos" accept="image/*" class="photo-input" onchange="previewPhoto(this)"/>
+                <img class="photo-preview"/>
+                <button type="button" class="remove-photo-btn" onclick="removePhotoContainer(this)">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="nombreEtoiles">Nombre d'étoiles:</label>
-                <input type="number" id="nombreEtoiles" name="nombreEtoiles" th:value="${hotel.nombreEtoiles}" min="1" max="5" required>
-            </div>
+        <button type="button" class="add-photo-btn" id="add-photo-btn">
+            <i class="fas fa-plus"></i> Ajouter une autre photo
+        </button>
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required th:text="${hotel.description}"></textarea>
-            </div>
+        <h3><i class="fas fa-city"></i> Ville</h3>
+        <div class="form-group">
+            <label for="villeNom"><i class="fas fa-map"></i> Nom de la ville:</label>
+            <select id="villeNom" name="ville.nom" required>
+                <option value="" disabled>-- Sélectionnez une ville --</option>
+                <option value="Casablanca" th:selected="${hotel.ville.nom eq 'Casablanca'}">Casablanca</option>
+                <option value="Rabat" th:selected="${hotel.ville.nom eq 'Rabat'}">Rabat</option>
+                <option value="Marrakech" th:selected="${hotel.ville.nom eq 'Marrakech'}">Marrakech</option>
+                <option value="Fès" th:selected="${hotel.ville.nom eq 'Fès'}">Fès</option>
+                <option value="Tanger" th:selected="${hotel.ville.nom eq 'Tanger'}">Tanger</option>
+                <option value="Meknès" th:selected="${hotel.ville.nom eq 'Meknès'}">Meknès</option>
+                <option value="Agadir" th:selected="${hotel.ville.nom eq 'Agadir'}">Agadir</option>
+                <option value="Oujda" th:selected="${hotel.ville.nom eq 'Oujda'}">Oujda</option>
+                <option value="Kénitra" th:selected="${hotel.ville.nom eq 'Kénitra'}">Kénitra</option>
+                <option value="Tétouan" th:selected="${hotel.ville.nom eq 'Tétouan'}">Tétouan</option>
+                <option value="Safi" th:selected="${hotel.ville.nom eq 'Safi'}">Safi</option>
+                <option value="Mohammédia" th:selected="${hotel.ville.nom eq 'Mohammédia'}">Mohammédia</option>
+                <option value="El Jadida" th:selected="${hotel.ville.nom eq 'El Jadida'}">El Jadida</option>
+                <option value="Béni Mellal" th:selected="${hotel.ville.nom eq 'Béni Mellal'}">Béni Mellal</option>
+                <option value="Nador" th:selected="${hotel.ville.nom eq 'Nador'}">Nador</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="ville.nom">Ville:</label>
-                <input type="text" id="ville.nom" name="ville.nom" th:value="${hotel.ville.nom}" required>
-            </div>
+        <div class="form-group">
+            <label for="villePays"><i class="fas fa-globe"></i> Pays:</label>
+            <input type="text" id="villePays" name="ville.pays" th:value="${hotel.ville.pays}" readonly required/>
+        </div>
 
-            <div class="form-group">
-                <label for="ville.pays">Pays:</label>
-                <input type="text" id="ville.pays" name="ville.pays" th:value="${hotel.ville.pays}" required>
-            </div>
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-save"></i> Enregistrer les modifications
+        </button>
+    </form>
 
-            <div class="form-group">
-                <label>Photo actuelle:</label>
-                <img th:src="${hotel.photo}" alt="Photo actuelle" class="current-photo">
-            </div>
+    <script>
+        $(document).ready(function() {
+            // Initialisation de Select2 pour la ville
+            $('#villeNom').select2({
+                placeholder: "Rechercher une ville...",
+                allowClear: true,
+                language: {
+                    noResults: function() {
+                        return "Ville non trouvée";
+                    }
+                }
+            });
 
-            <div class="form-group">
-                <label for="photoFile">Nouvelle photo principale:</label>
-                <input type="file" id="photoFile" name="photoFile" accept="image/*">
-            </div>
+            // Preview pour la photo principale
+            $("#photoFile").change(function() {
+                readURL(this, "#preview-main");
+            });
 
-            <div class="form-group">
-                <label for="additionalPhotos">Photos additionnelles:</label>
-                <input type="file" id="additionalPhotos" name="additionalPhotos" accept="image/*" multiple>
-            </div>
+            // Ajouter une autre photo
+            $("#add-photo-btn").click(function() {
+                const photoContainer = `
+                    <div class="photo-container">
+                        <label><i class="fas fa-image"></i> Photo:</label>
+                        <input type="file" name="additionalPhotos" accept="image/*" class="photo-input" onchange="previewPhoto(this)"/>
+                        <img class="photo-preview"/>
+                        <button type="button" class="remove-photo-btn" onclick="removePhotoContainer(this)">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
+                    </div>
+                `;
+                $("#photos-container").append(photoContainer);
+            });
+        });
 
-            <button type="submit" class="submit-btn">Enregistrer les modifications</button>
-        </form>
-    </div>
+        // Fonction pour prévisualiser l'image principale
+        function readURL(input, previewId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $(previewId).attr('src', e.target.result);
+                    $(previewId).css('display', 'block');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Fonction pour prévisualiser les images additionnelles
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $(input).next('.photo-preview').attr('src', e.target.result);
+                    $(input).next('.photo-preview').css('display', 'block');
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Fonction pour supprimer un conteneur de photo
+        function removePhotoContainer(button) {
+            $(button).parent('.photo-container').remove();
+        }
+    </script>
 </body>
-</html> 
+</html>

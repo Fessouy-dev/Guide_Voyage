@@ -20,7 +20,9 @@ public class Endroit {
             joinColumns = @JoinColumn(name = "endroit_id"))
     @Column(name = "photo_url")
     private List<String> photos = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private Boolean nValide;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn (name = "ville_id")

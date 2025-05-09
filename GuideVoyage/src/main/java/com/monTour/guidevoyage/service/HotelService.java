@@ -1,5 +1,6 @@
 package com.monTour.guidevoyage.service;
 
+import com.monTour.guidevoyage.model.Activite;
 import com.monTour.guidevoyage.model.Hotel;
 import com.monTour.guidevoyage.repository.HotelRepository;
 import org.springframework.stereotype.Service;
@@ -58,4 +59,6 @@ public class HotelService {
         }
         return null;
     }
+
+
 }

@@ -300,6 +300,37 @@
             padding: 3rem;
             color: #888;
         }
+
+        .beautiful-choice {
+            margin-top: 3.5rem;
+            margin-bottom: 2.5rem;
+            padding: 2.5rem 1rem;
+            background: rgba(255,255,255,0.85);
+            border-radius: 18px;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.07);
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .beautiful-choice:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        .beautiful-choice .btn-lg {
+            min-width: 260px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .beautiful-choice .btn-lg:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+        }
     </style>
 </head>
 <body>
@@ -321,8 +352,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/programmes">
-                        <i class="fas fa-calendar-day me-1"></i> Programmes du jour
+                    <a class="nav-link" th:href="@{/tourisme/}">
+                        <i class="fas fa-calendar-day me-1"></i> Recommandations
                     </a>
                 </li>
                 <li class="nav-item">
@@ -362,6 +393,8 @@
 <!-- Main Content -->
 <div class="container mt-4">
     <h2 class="page-title">Découvrez Nos Activités Touristiques</h2>
+
+
 
     <!-- Filter Section -->
     <div class="filter-section">

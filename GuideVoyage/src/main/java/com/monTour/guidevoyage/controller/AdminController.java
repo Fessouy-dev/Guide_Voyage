@@ -5,6 +5,7 @@ import com.monTour.guidevoyage.service.ActiviteService;
 import com.monTour.guidevoyage.service.HotelService;
 import com.monTour.guidevoyage.service.RestaurantService;
 import com.monTour.guidevoyage.service.UtilisateurService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

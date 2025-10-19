@@ -60,10 +60,15 @@ L’objectif est d’offrir une expérience de voyage intelligente, basée sur l
 ### 👤 Auteur
 **Youssef Hamdaoui**  
 💡 Développeur passionné par l’IA, la data .  
----
-📬 **Contact**
-Si vous souhaitez en savoir plus sur le projet ou voir une démo complète :  
-**Youssef Hamdaoui**  
 📧 ucef.hamdaoui@gmail.com  
 🌐 [LinkedIn](https://www.linkedin.com/in/youssef-hamdaoui/)
+---
+
+📬 **Contact**
+Si vous souhaitez en savoir plus sur le projet ou voir une démo complète :  
+### 🔒 Code Source
+Pour des raisons de confidentialité et de propriété intellectuelle,  
+le code source complet de ce projet n’est **pas publié** ici.  
+Ce dépôt présente uniquement la **structure du projet**, les **fonctionnalités** et des **captures d’écran**. 
+
 

@@ -59,8 +59,11 @@ L’objectif est d’offrir une expérience de voyage intelligente, basée sur l
 
 ### 👤 Auteur
 **Youssef Hamdaoui**  
-💡 Développeur passionné par l’IA, la data et le tourisme intelligent.  
-🔗 [LinkedIn](https://www.linkedin.com/in/youssef-hamdaoui/)  
-
+💡 Développeur passionné par l’IA, la data .  
 ---
+📬 **Contact**
+Si vous souhaitez en savoir plus sur le projet ou voir une démo complète :  
+**Youssef Hamdaoui**  
+📧 ucef.hamdaoui@gmail.com  
+🌐 [LinkedIn](https://www.linkedin.com/in/youssef-hamdaoui/)
 
